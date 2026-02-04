@@ -14,23 +14,21 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .font-serif { font-family: 'Playfair Display', serif; }
+        
         .scale-in { animation: scaleIn 0.3s ease-out; }
         @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
         .loader { border-top-color: #3498db; animation: spinner 1.5s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .hidden { display: none !important; }
-        .shimmer {
-            background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         
-        /* Estilização da barra de scroll horizontal para a chave PIX */
+        /* Scrollbar discreta para a chave PIX (resolve o corte no mobile) */
         .pix-scroll::-webkit-scrollbar { height: 4px; }
         .pix-scroll::-webkit-scrollbar-track { background: #f5f5f4; }
         .pix-scroll::-webkit-scrollbar-thumb { background: #e7e5e4; border-radius: 10px; }
+        .no-wrap { white-space: nowrap !important; }
     </style>
 </head>
 
@@ -58,6 +56,7 @@
                 </p>
             </section>
 
+            <!-- GRELHA MOBILE EM DUPLAS (grid-cols-2) -->
             <div id="gifts-grid" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-10">
                 <div class="col-span-full text-center py-20 text-stone-300 font-serif italic text-xl border-2 border-dashed border-stone-100 rounded-[3rem]">
                     A carregar lista de presentes...
@@ -65,25 +64,16 @@
             </div>
         </main>
 
-        <!-- VISÃO ADMIN -->
+        <!-- VISÃO ADMIN (PAINEL DE GESTÃO) -->
         <main id="admin-view" class="max-w-7xl mx-auto p-6 md:p-10 hidden font-sans">
-            <div id="admin-login-screen" class="min-h-[50vh] flex items-center justify-center">
-                <div class="bg-white p-10 rounded-[2.5rem] shadow-xl w-full max-w-md text-center border border-stone-100">
-                    <i data-lucide="lock" class="w-12 h-12 text-stone-200 mx-auto mb-6"></i>
-                    <h2 class="text-2xl font-serif font-bold mb-8 text-stone-800">Acesso Restrito</h2>
-                    <input type="password" id="admin-pass-input" placeholder="Palavra-passe" class="w-full border-b border-stone-200 focus:border-stone-900 outline-none py-4 mb-8 text-center text-2xl tracking-widest bg-transparent">
-                    <button onclick="handleAdminAuth()" class="w-full py-5 bg-stone-900 text-white rounded-2xl font-bold shadow-lg hover:bg-black transition-all">Login</button>
-                    <button onclick="setView('client')" class="mt-6 text-stone-400 text-xs uppercase tracking-widest font-bold">Voltar</button>
-                </div>
-            </div>
-
-            <div id="admin-dashboard" class="hidden">
+            <div id="admin-dashboard">
                 <div class="flex justify-between items-center mb-10 border-b pb-6">
-                    <h2 class="font-serif text-3xl text-stone-800 font-bold">Gestão do Casamento</h2>
+                    <h2 class="font-serif text-3xl text-stone-800 font-bold">Gestão</h2>
                     <button onclick="setView('client')" class="text-xs uppercase tracking-widest bg-stone-200 px-6 py-3 rounded-xl font-bold hover:bg-stone-300 transition-all">Sair do Painel</button>
                 </div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 text-left">
+                    <!-- FORMULÁRIO -->
                     <div class="lg:col-span-1">
                         <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-stone-100 h-fit sticky top-10">
                             <h3 class="font-bold uppercase text-[10px] tracking-widest text-stone-500 mb-8 flex items-center gap-2">
@@ -93,7 +83,7 @@
                                 <input type="hidden" id="edit-id">
                                 <div class="space-y-1">
                                     <label class="text-[10px] uppercase font-bold text-stone-400 ml-1">Nome do Item</label>
-                                    <input id="form-nome" placeholder="Ex: Presente" class="w-full p-4 bg-stone-50 rounded-xl border-transparent focus:border-stone-200 shadow-inner outline-none transition-all" required>
+                                    <input id="form-nome" placeholder="Ex: Cota Jantar" class="w-full p-4 bg-stone-50 rounded-xl border-transparent focus:border-stone-200 shadow-inner outline-none transition-all" required>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div class="space-y-1">
@@ -118,9 +108,7 @@
                     <div class="lg:col-span-2 space-y-10">
                         <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-stone-100">
                             <div class="flex justify-between items-center mb-8">
-                                <h3 class="font-bold uppercase text-[10px] tracking-widest text-stone-500 flex items-center gap-2">
-                                    <i data-lucide="list" class="w-4 h-4"></i> Contribuições e Reservas
-                                </h3>
+                                <h3 class="font-bold uppercase text-[10px] tracking-widest text-stone-500">Contribuições</h3>
                                 <button onclick="handleClearAllContribs()" class="text-[10px] text-red-400 font-bold uppercase hover:text-red-600 transition-colors">Limpar Tudo</button>
                             </div>
                             <div class="overflow-x-auto">
@@ -129,7 +117,7 @@
                                         <tr class="uppercase text-[10px]">
                                             <th class="pb-4">Convidado</th>
                                             <th class="pb-4">Presente</th>
-                                            <th class="pb-4">Quantidade</th>
+                                            <th class="pb-4">Montante</th>
                                             <th class="pb-4 text-right">Ação</th>
                                         </tr>
                                     </thead>
@@ -140,7 +128,7 @@
 
                         <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-stone-100">
                             <h3 class="font-bold uppercase text-[10px] tracking-widest text-stone-500 mb-6 flex items-center gap-2">
-                                <i data-lucide="package" class="w-4 h-4"></i> Itens na Vitrine
+                                <i data-lucide="package" class="w-4 h-4"></i> Vitrine
                             </h3>
                             <div id="admin-gifts-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                         </div>
@@ -152,13 +140,41 @@
         <!-- RODAPÉ -->
         <footer class="py-24 bg-white border-t border-stone-50 text-center font-sans">
             <p class="text-stone-400 text-[10px] tracking-[0.5em] uppercase font-light mb-6 tracking-[0.4em]">Guilherme & Nuria • 2026</p>
-            <button onclick="setView('admin')" class="text-stone-200 hover:text-stone-500 flex items-center gap-2 mx-auto text-[10px] uppercase tracking-widest p-4 rounded-full border border-transparent hover:border-stone-50 transition-all">
+            <button onclick="openLoginModal()" class="text-stone-200 hover:text-stone-500 flex items-center gap-2 mx-auto text-[10px] uppercase tracking-widest p-4 rounded-full border border-transparent hover:border-stone-50 transition-all">
                 <i data-lucide="settings" class="w-3 h-3"></i> Área do Casal
             </button>
         </footer>
     </div>
 
-    <!-- MODAIS -->
+    <!-- MODAL DE LOGIN (ESTETICAMENTE BONITO) -->
+    <div id="modal-login" class="fixed inset-0 z-[100] hidden items-center justify-center p-6 bg-stone-900/60 backdrop-blur-md font-sans">
+        <div class="bg-white p-10 md:p-14 rounded-[3rem] shadow-2xl max-w-md w-full scale-in border border-stone-100 text-center relative">
+            <button onclick="closeModal('modal-login')" class="absolute top-8 right-8 text-stone-300 hover:text-stone-900"><i data-lucide="x" class="w-6 h-6"></i></button>
+            
+            <div class="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-8 text-rose-300">
+                <i data-lucide="lock" class="w-10 h-10"></i>
+            </div>
+            
+            <h2 class="text-3xl font-serif font-light mb-2 text-stone-800">Acesso Restrito</h2>
+            <p class="text-stone-400 text-sm mb-10 leading-relaxed">Olá Gui ou Nuria, digitem a vossa senha para aceder ao painel de gestão.</p>
+            
+            <div class="space-y-6">
+                <div class="relative">
+                    <input type="password" id="login-pass-input" placeholder="Palavra-passe" 
+                        class="w-full bg-stone-50 border-b-2 border-stone-100 focus:border-stone-900 outline-none py-5 text-center text-3xl tracking-[0.3em] transition-all rounded-2xl shadow-inner placeholder:tracking-normal placeholder:text-sm placeholder:text-stone-300"
+                        onkeypress="if(event.key === 'Enter') handleAdminAuth()">
+                </div>
+                
+                <button onclick="handleAdminAuth()" class="w-full py-6 bg-stone-900 text-white rounded-[2rem] font-bold shadow-xl hover:bg-black active:scale-95 transition-all flex items-center justify-center gap-3">
+                    Entrar no Painel <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+                
+                <button onclick="closeModal('modal-login')" class="text-stone-300 text-[10px] uppercase font-bold tracking-widest hover:text-stone-500 transition-colors">Voltar para o site</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CLIENTE: ESCOLHER QUANTIDADE -->
     <div id="modal-gift" class="fixed inset-0 z-50 hidden items-center justify-center p-6 bg-stone-900/40 backdrop-blur-sm font-sans">
         <div class="relative bg-white w-full max-w-md rounded-[3rem] p-12 text-center scale-in shadow-2xl border border-stone-100">
             <h3 class="text-4xl font-serif font-light text-stone-800 mb-2 tracking-tighter">Com Carinho</h3>
@@ -168,7 +184,6 @@
                     <label class="block text-[10px] uppercase tracking-widest text-stone-400 mb-2 font-bold">O Teu Nome ou Família</label>
                     <input type="text" id="guest-name-input" placeholder="Como devemos assinar?" class="w-full border-b border-stone-200 focus:border-stone-900 outline-none py-4 text-xl bg-transparent transition-all">
                 </div>
-
                 <div class="flex items-center justify-between bg-stone-50 p-6 rounded-3xl border border-stone-100 shadow-inner">
                     <span class="text-[10px] uppercase font-bold text-stone-400">Quantidade</span>
                     <div class="flex items-center gap-6">
@@ -177,11 +192,9 @@
                         <button onclick="updateQty(1)" class="w-10 h-10 flex items-center justify-center bg-white border border-stone-100 rounded-xl text-stone-400 hover:bg-rose-50 font-bold shadow-sm">+</button>
                     </div>
                 </div>
-
                 <div class="text-center pt-2" id="modal-total-box">
                     <p id="modal-total" class="text-4xl font-serif italic text-stone-900"></p>
                 </div>
-                
                 <button id="btn-confirm-gift" onclick="handleConfirmContribution()" class="w-full py-6 bg-stone-900 text-white rounded-[2rem] font-bold shadow-xl active:scale-95 transition-all">Confirmar Presente</button>
                 <button onclick="closeModal('modal-gift')" class="w-full text-stone-300 text-[10px] uppercase font-bold mt-4 text-center">Voltar atrás</button>
             </div>
@@ -190,7 +203,6 @@
 
     <!-- MODAL: PIX PAGAMENTO -->
     <div id="modal-pix" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 md:p-6 bg-stone-900/60 backdrop-blur-xl font-sans text-center">
-        <!-- Aumentada a largura máxima para max-w-lg para acomodar e-mails longos melhor -->
         <div class="relative bg-white w-full max-w-lg rounded-[3rem] md:rounded-[3.5rem] p-8 md:p-12 scale-in shadow-2xl border border-stone-100">
             <h3 class="text-3xl md:text-4xl font-serif font-light mb-4 tracking-tighter text-stone-800">Muito Obrigado!</h3>
             <p id="pix-instruction" class="text-stone-500 text-sm mb-8 leading-relaxed font-light"></p>
@@ -200,22 +212,19 @@
                 <span class="text-[10px] font-bold text-stone-400 uppercase tracking-widest"><i data-lucide="qr-code" class="w-3 h-3 inline mr-1"></i> QR CODE DE PAGAMENTO</span>
             </div>
 
-            <!-- CHAVE PIX CORRIGIDA: SEM QUEBRA, SCROLL HORIZONTAL DISCRETO E TAMANHO ORIGINAL -->
             <div class="bg-stone-50 p-4 md:p-6 rounded-2xl mb-8 border border-stone-100 group transition-all hover:bg-white shadow-inner text-left overflow-hidden">
                 <div class="flex items-center gap-2 mb-3 text-rose-300 font-bold">
                     <i data-lucide="copy" class="w-3 h-3"></i>
                     <span class="text-[10px] uppercase tracking-widest">Chave PIX para transferir</span>
                 </div>
 
-                <div class="flex items-center justify-between gap-3 overflow-hidden">
+                <div class="flex items-center justify-between gap-4 overflow-hidden">
                     <div class="overflow-x-auto flex-grow pix-scroll">
-                        <!-- Removido truncate e adicionado whitespace-nowrap para manter original sem quebra -->
-                        <p id="pix-payload" class="text-stone-800 text-sm md:text-base font-medium whitespace-nowrap pb-1">
-                        </p>
+                        <!-- Resolvido: white-space: nowrap impede que o e-mail quebre a linha -->
+                        <p id="pix-payload" class="text-stone-800 text-sm md:text-base font-medium no-wrap pb-1"></p>
                     </div>
-
-                    <button onclick="copyPixToClipboard()" class="shrink-0 p-3 bg-white shadow-sm border border-stone-50 rounded-xl active:scale-90 flex items-center justify-center">
-                        <i id="pix-copy-icon" data-lucide="copy" class="w-4 h-4 text-stone-300"></i>
+                    <button onclick="copyPixToClipboard()" class="shrink-0 p-3 bg-white shadow-sm border border-stone-50 rounded-xl active:scale-90 flex items-center justify-center hover:bg-rose-50">
+                        <i id="pix-copy-icon" data-lucide="copy" class="w-4 h-4 text-stone-300 transition-colors"></i>
                     </button>
                 </div>
             </div>
@@ -242,33 +251,38 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, setDoc, doc, deleteDoc, updateDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Configuração segura do Firebase
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
-            : {
-                apiKey: "AIzaSyCVjoXpO5PwW3-7B8KBs4jzKQcVWVCzi_s",
-                authDomain: "casamento-fb87b.firebaseapp.com",
-                projectId: "casamento-fb87b",
-                storageBucket: "casamento-fb87b.firebasestorage.app",
-                messagingSenderId: "727131908134",
-                appId: "1:727131908134:web:e1df1695894c2220171ee7",
-                measurementId: "G-QFL6YHZF0X"
-            };
+        // CONFIGURAÇÃO FIREBASE (BRUNO)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVjoXpO5PwW3-7B8KBs4jzKQcVWVCzi_s",
+            authDomain: "casamento-fb87b.firebaseapp.com",
+            projectId: "casamento-fb87b",
+            storageBucket: "casamento-fb87b.firebasestorage.app",
+            messagingSenderId: "727131908134",
+            appId: "1:727131908134:web:e1df1695894c2220171ee7",
+            measurementId: "G-QFL6YHZF0X"
+        };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Lógica de Caminhos
         const isCanvas = typeof __app_id !== 'undefined';
-        const appId = isCanvas ? __app_id : 'casamento_guilherme_nuria';
+        const currentAppId = isCanvas ? __app_id : 'casamento_gui_nuria';
         
-        const giftsPath = isCanvas ? ['artifacts', appId, 'public', 'data', 'gifts'] : ['casamento_guilherme_nuria', 'lista', 'presentes'];
-        const contribsPath = isCanvas ? ['artifacts', appId, 'public', 'data', 'contributions'] : ['casamento_guilherme_nuria', 'lista', 'contribuicoes'];
+        const giftsPath = isCanvas 
+            ? ['artifacts', currentAppId, 'public', 'data', 'gifts'] 
+            : ['casamento_gui_nuria', 'lista', 'presentes'];
+            
+        const contribsPath = isCanvas 
+            ? ['artifacts', currentAppId, 'public', 'data', 'contributions'] 
+            : ['casamento_gui_nuria', 'lista', 'contribuicoes'];
 
         const ADMIN_PASSWORD = "Flamengo99";
         let user = null;
         let gifts = [], contributions = [], selectedGift = null, modalQty = 1;
 
+        // PIX logic
         const crc16 = (d) => {
             let c = 0xFFFF;
             for (let i = 0; i < d.length; i++) {
@@ -287,24 +301,29 @@
             return p + crc16(p);
         };
 
-        window.setView = (v) => {
-            document.getElementById('client-view').classList.toggle('hidden', v !== 'client');
-            document.getElementById('admin-view').classList.toggle('hidden', v !== 'admin');
-            if(v === 'admin') {
-                const authed = sessionStorage.getItem('admin_authed') === 'true';
-                document.getElementById('admin-login-screen').classList.toggle('hidden', authed);
-                document.getElementById('admin-dashboard').classList.toggle('hidden', !authed);
-            }
-            window.scrollTo(0,0);
+        // UI HELPERS
+        window.openLoginModal = () => {
+            const authed = sessionStorage.getItem('admin_authed') === 'true';
+            if (authed) { setView('admin'); } else { openModal('modal-login'); }
         };
 
         window.handleAdminAuth = () => {
-            if(document.getElementById('admin-pass-input').value === ADMIN_PASSWORD) {
+            const input = document.getElementById('login-pass-input').value;
+            if (input === ADMIN_PASSWORD) {
                 sessionStorage.setItem('admin_authed', 'true');
-                document.getElementById('admin-login-screen').classList.add('hidden');
-                document.getElementById('admin-dashboard').classList.remove('hidden');
+                closeModal('modal-login');
+                setView('admin');
                 renderAdminData();
-            } else { alert("Senha incorreta!"); }
+            } else {
+                showStatus("Senha incorreta!", "bg-rose-100 text-rose-700 border-rose-200");
+                document.getElementById('login-pass-input').value = "";
+            }
+        };
+
+        window.setView = (v) => {
+            document.getElementById('client-view').classList.toggle('hidden', v !== 'client');
+            document.getElementById('admin-view').classList.toggle('hidden', v !== 'admin');
+            window.scrollTo(0,0);
         };
 
         window.closeModal = (id) => { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); };
@@ -315,23 +334,26 @@
             b.innerHTML = msg; 
             b.className = `max-w-4xl mx-auto mt-8 p-6 rounded-[2rem] text-sm text-center font-sans shadow-lg block border-2 ${classes}`;
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => b.classList.add('hidden'), 15000);
+            setTimeout(() => b.classList.add('hidden'), 10000);
         }
 
+        // --- DATA MANAGEMENT ---
         function initData() {
             onSnapshot(collection(db, ...giftsPath), snap => {
                 gifts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                renderGifts(); renderAdminData();
+                renderGifts(); 
+                renderAdminData();
             });
             onSnapshot(collection(db, ...contribsPath), snap => {
                 contributions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                renderGifts(); renderAdminData();
+                renderGifts(); 
+                renderAdminData();
             });
         }
 
         window.renderGifts = () => {
             const grid = document.getElementById('gifts-grid');
-            if(gifts.length === 0) { grid.innerHTML = `<div class="col-span-full text-center py-20 text-stone-300 font-serif italic text-xl border-2 border-dashed border-stone-100 rounded-[3rem]">A carregar lista...</div>`; return; }
+            if(gifts.length === 0) { grid.innerHTML = `<div class="col-span-full text-center py-20 text-stone-300 font-serif italic text-xl border-2 border-dashed border-stone-100 rounded-[3rem]">Sem itens configurados.</div>`; return; }
             grid.innerHTML = gifts.map(item => {
                 const used = contributions.filter(c => c.giftId === item.id).reduce((s, c) => s + (parseInt(c.quantity) || 0), 0);
                 const rem = Math.max(0, (parseInt(item.totalQuotas) || 1) - used);
@@ -345,14 +367,8 @@
                             <i data-lucide="gift" class="w-5 h-5 md:w-10 md:h-10"></i>
                         </div>
                         <h3 class="text-sm md:text-3xl font-serif font-light mb-2 md:mb-4 text-stone-800 leading-tight line-clamp-2 min-h-[2.5rem] md:min-h-0">${item.nome}</h3>
-                        
-                        <p class="text-stone-900 text-xs md:text-xl mb-1 md:mb-2 uppercase font-bold tracking-widest">
-                            ${isFree ? 'REGISTO LIVRE' : 'COTA: R$ ' + parseFloat(item.valor).toFixed(2)}
-                        </p>
-                        <p class="text-[10px] md:text-lg uppercase font-bold mb-4 md:mb-8 ${rem > 0 ? 'text-emerald-600' : 'text-rose-500'}">
-                            ${rem > 0 ? rem + ' disponíveis' : 'Reservado'}
-                        </p>
-
+                        <p class="text-stone-900 text-xs md:text-xl mb-1 md:mb-2 uppercase font-bold tracking-widest">${isFree ? 'REGISTO LIVRE' : 'COTA: R$ ' + parseFloat(item.valor).toFixed(2)}</p>
+                        <p class="text-[10px] md:text-lg uppercase font-bold mb-4 md:mb-8 ${rem > 0 ? 'text-emerald-600' : 'text-rose-500'}">${rem > 0 ? rem + ' disponíveis' : 'Reservado'}</p>
                         <button onclick="handleOpenGiftModal('${item.id}', ${rem})" ${isSoldOut ? 'disabled' : ''} class="mt-auto w-full py-3 md:py-5 bg-stone-900 text-white rounded-xl md:rounded-2xl text-[9px] md:text-[10px] uppercase font-bold hover:bg-black transition-all shadow-md">
                             ${isFree ? 'Oferecer' : 'Presentear'}
                         </button>
@@ -364,36 +380,36 @@
 
         window.renderAdminData = () => {
             const list = document.getElementById('contributions-list');
+            if(!list) return;
             const sorted = [...contributions].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
             list.innerHTML = sorted.map(c => `
                 <tr class="border-b border-stone-50 text-xs font-sans group">
                     <td class="py-5 font-medium text-stone-800">${c.guestName}</td>
                     <td class="py-5 text-stone-500">${c.giftName} (${c.quantity}x)</td>
-                    <td class="py-5 font-bold text-stone-900">
-                        ${c.totalValue > 0 ? 'R$ ' + parseFloat(c.totalValue).toFixed(2) : '<span class="text-emerald-500 uppercase text-[10px]">Reservado</span>'}
-                    </td>
+                    <td class="py-5 font-bold text-stone-900">${c.totalValue > 0 ? 'R$ ' + parseFloat(c.totalValue).toFixed(2) : '<span class="text-emerald-500 uppercase text-[10px]">Reservado</span>'}</td>
                     <td class="py-5 text-right">
                         <button onclick="handleDeleteContrib('${c.id}')" class="p-2 text-stone-200 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </td>
                 </tr>`).join('');
             const adminGifts = document.getElementById('admin-gifts-list');
-            adminGifts.innerHTML = gifts.map(item => `
-                <div class="flex items-center gap-4 p-4 border border-stone-100 rounded-2xl bg-stone-50/30 group hover:bg-stone-50 transition-all shadow-inner font-sans">
-                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-stone-200 shadow-sm"><i data-lucide="gift" class="w-5 h-5"></i></div>
-                    <div class="flex-grow min-w-0">
-                        <p class="font-bold text-xs truncate text-stone-800">${item.nome}</p>
-                        <p class="text-[9px] text-stone-400 font-bold uppercase">
-                            ${(!item.valor || item.valor === 0) ? 'Livre' : 'R$ ' + parseFloat(item.valor).toFixed(2)} | Qtd: ${item.totalQuotas}
-                        </p>
-                    </div>
-                    <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onclick="handleEditItem('${item.id}')" class="p-2 text-stone-400 hover:text-stone-900 transition-colors" title="Editar"><i data-lucide="pencil" class="w-4 h-4"></i></button>
-                        <button onclick="handleDeleteItem('${item.id}')" class="p-2 text-stone-400 hover:text-red-500 transition-colors" title="Excluir"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </div>
-                </div>`).join('');
+            if(adminGifts) {
+                adminGifts.innerHTML = gifts.map(item => `
+                    <div class="flex items-center gap-4 p-4 border border-stone-100 rounded-2xl bg-stone-50/30 group hover:bg-stone-50 transition-all shadow-inner font-sans text-left">
+                        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-stone-300 shadow-sm"><i data-lucide="gift" class="w-5 h-5"></i></div>
+                        <div class="flex-grow min-w-0">
+                            <p class="font-bold text-xs truncate text-stone-800">${item.nome}</p>
+                            <p class="text-[9px] text-stone-400 font-bold uppercase">${(!item.valor || item.valor === 0) ? 'Livre' : 'R$ ' + parseFloat(item.valor).toFixed(2)} | Qtd: ${item.totalQuotas}</p>
+                        </div>
+                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="handleEditItem('${item.id}')" class="p-2 text-stone-400 hover:text-stone-900 transition-colors"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                            <button onclick="handleDeleteItem('${item.id}')" class="p-2 text-stone-400 hover:text-red-500 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>`).join('');
+            }
             lucide.createIcons();
         };
 
+        // --- ACTIONS ---
         document.getElementById('gift-form').onsubmit = async (e) => {
             e.preventDefault();
             const editId = document.getElementById('edit-id').value;
@@ -414,6 +430,7 @@
 
         window.handleEditItem = (id) => {
             const item = gifts.find(g => g.id === id);
+            if (!item) return;
             document.getElementById('edit-id').value = id;
             document.getElementById('form-nome').value = item.nome;
             document.getElementById('form-valor').value = item.valor || 0;
@@ -421,7 +438,6 @@
             document.getElementById('form-pix-key').value = item.pixKey || '';
             document.getElementById('btn-save').innerText = "Atualizar Item";
             document.getElementById('btn-cancel-edit').classList.remove('hidden');
-            window.scrollTo({ top: 100, behavior: 'smooth' });
         };
 
         window.resetGiftForm = () => {
@@ -456,8 +472,10 @@
             });
         };
 
+        // --- CLIENT ---
         window.handleOpenGiftModal = (id, rem) => {
             selectedGift = gifts.find(g => g.id === id);
+            if (!selectedGift) return;
             selectedGift.rem = rem; modalQty = 1;
             document.getElementById('guest-name-input').value = '';
             document.getElementById('modal-gift-name').innerText = selectedGift.nome;
@@ -506,9 +524,7 @@
                     document.getElementById('pix-payload').innerText = selectedGift.pixKey;
                     document.getElementById('pix-instruction').innerHTML = `<b>${name}</b>, utiliza o código abaixo ou o QR Code para pagar <b>R$ ${total.toFixed(2)}</b> via PIX.`;
                     closeModal('modal-gift'); openModal('modal-pix');
-                } else { 
-                    handleFinishProcess();
-                }
+                } else { handleFinishProcess(); }
             } catch(e) { console.error(e); btn.disabled = false; }
         };
 
@@ -527,6 +543,7 @@
             document.getElementById('btn-confirm-action').onclick = action;
         }
 
+        // Init
         async function startApp() {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -538,5 +555,4 @@
         startApp();
     </script>
 </body>
-
 </html>
