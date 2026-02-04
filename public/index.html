@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-pt">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,8 +26,14 @@
             animation: shimmer 1.5s infinite;
         }
         @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        
+        /* Estilização da barra de scroll horizontal para a chave PIX */
+        .pix-scroll::-webkit-scrollbar { height: 4px; }
+        .pix-scroll::-webkit-scrollbar-track { background: #f5f5f4; }
+        .pix-scroll::-webkit-scrollbar-thumb { background: #e7e5e4; border-radius: 10px; }
     </style>
 </head>
+
 <body class="bg-stone-50 text-stone-900 selection:bg-rose-100">
 
     <div id="app">
@@ -34,13 +41,13 @@
         <header class="py-20 px-4 text-center bg-white border-b border-stone-200 relative shadow-sm">
             <div class="max-w-4xl mx-auto">
                 <i data-lucide="heart" class="w-10 h-10 mx-auto mb-6 text-rose-200 fill-rose-50"></i>
-                <h1 class="text-5xl md:text-7xl font-serif font-light mb-6 tracking-tighter text-stone-800">Gui & Nuria</h1>
+                <h1 class="text-5xl md:text-7xl font-serif font-light mb-6 tracking-tighter text-stone-800">Guilherme & Nuria</h1>
                 <div class="w-32 h-px bg-stone-100 mx-auto mb-6"></div>
                 <p class="text-stone-400 uppercase tracking-[0.5em] text-[10px] md:text-xs font-light tracking-[0.3em]">Lista de Presentes do Casamento</p>
             </div>
         </header>
 
-        <!-- BANNER DE STATUS / MENSAGEM DE OBRIGADO -->
+        <!-- BANNER DE STATUS -->
         <div id="status-banner" class="hidden max-w-4xl mx-auto mt-8 p-6 rounded-[2rem] text-sm text-center font-sans shadow-lg border animate-in fade-in zoom-in duration-500"></div>
 
         <!-- VISÃO CLIENTE -->
@@ -144,7 +151,7 @@
 
         <!-- RODAPÉ -->
         <footer class="py-24 bg-white border-t border-stone-50 text-center font-sans">
-            <p class="text-stone-400 text-[10px] tracking-[0.5em] uppercase font-light mb-6 tracking-[0.4em]">Gui & Nuria • 2026</p>
+            <p class="text-stone-400 text-[10px] tracking-[0.5em] uppercase font-light mb-6 tracking-[0.4em]">Guilherme & Nuria • 2026</p>
             <button onclick="setView('admin')" class="text-stone-200 hover:text-stone-500 flex items-center gap-2 mx-auto text-[10px] uppercase tracking-widest p-4 rounded-full border border-transparent hover:border-stone-50 transition-all">
                 <i data-lucide="settings" class="w-3 h-3"></i> Área do Casal
             </button>
@@ -182,25 +189,38 @@
     </div>
 
     <!-- MODAL: PIX PAGAMENTO -->
-    <div id="modal-pix" class="fixed inset-0 z-[60] hidden items-center justify-center p-6 bg-stone-900/60 backdrop-blur-xl font-sans text-center">
-        <div class="bg-white w-full max-w-md rounded-[3.5rem] p-12 scale-in shadow-2xl border border-stone-100">
-            <h3 class="text-3xl font-serif font-bold mb-4 text-stone-800">Muito Obrigado!</h3>
-            <p id="pix-instruction" class="text-stone-500 text-sm mb-10 leading-relaxed font-light"></p>
-            <div class="bg-stone-50 p-8 rounded-[3rem] mb-10 flex flex-col items-center border border-stone-100 shadow-inner">
-                <img id="pix-qr" src="" class="w-56 h-56 object-contain rounded-lg mb-4 shadow-sm">
+    <div id="modal-pix" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 md:p-6 bg-stone-900/60 backdrop-blur-xl font-sans text-center">
+        <!-- Aumentada a largura máxima para max-w-lg para acomodar e-mails longos melhor -->
+        <div class="relative bg-white w-full max-w-lg rounded-[3rem] md:rounded-[3.5rem] p-8 md:p-12 scale-in shadow-2xl border border-stone-100">
+            <h3 class="text-3xl md:text-4xl font-serif font-light mb-4 tracking-tighter text-stone-800">Muito Obrigado!</h3>
+            <p id="pix-instruction" class="text-stone-500 text-sm mb-8 leading-relaxed font-light"></p>
+            
+            <div class="bg-stone-50 p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] mb-8 flex flex-col items-center border border-stone-100 shadow-inner">
+                <img id="pix-qr" src="" class="w-48 h-48 md:w-56 md:h-56 object-contain rounded-lg mb-4 shadow-sm">
                 <span class="text-[10px] font-bold text-stone-400 uppercase tracking-widest"><i data-lucide="qr-code" class="w-3 h-3 inline mr-1"></i> QR CODE DE PAGAMENTO</span>
             </div>
-            <div class="bg-stone-50 p-6 rounded-2xl mb-10 relative text-left border border-stone-100 group transition-all hover:bg-white shadow-inner">
-                <div class="flex items-center gap-2 mb-2">
-                    <i data-lucide="copy" class="w-3 h-3 text-rose-300"></i>
-                    <span class="text-[10px] font-bold text-rose-300 uppercase tracking-widest">Chave PIX para transferir</span>
+
+            <!-- CHAVE PIX CORRIGIDA: SEM QUEBRA, SCROLL HORIZONTAL DISCRETO E TAMANHO ORIGINAL -->
+            <div class="bg-stone-50 p-4 md:p-6 rounded-2xl mb-8 border border-stone-100 group transition-all hover:bg-white shadow-inner text-left overflow-hidden">
+                <div class="flex items-center gap-2 mb-3 text-rose-300 font-bold">
+                    <i data-lucide="copy" class="w-3 h-3"></i>
+                    <span class="text-[10px] uppercase tracking-widest">Chave PIX para transferir</span>
                 </div>
-                <p id="pix-payload" class="text-stone-500 pr-12 text-sm font-medium break-all"></p>
-                <button onclick="copyPixToClipboard()" class="absolute right-3 top-1/2 -translate-y-1/2 p-3 bg-white shadow-sm border border-stone-50 rounded-xl active:scale-90 hover:bg-stone-50 transition-all">
-                    <i id="pix-copy-icon" data-lucide="copy" class="w-4 h-4 text-stone-300"></i>
-                </button>
+
+                <div class="flex items-center justify-between gap-3 overflow-hidden">
+                    <div class="overflow-x-auto flex-grow pix-scroll">
+                        <!-- Removido truncate e adicionado whitespace-nowrap para manter original sem quebra -->
+                        <p id="pix-payload" class="text-stone-800 text-sm md:text-base font-medium whitespace-nowrap pb-1">
+                        </p>
+                    </div>
+
+                    <button onclick="copyPixToClipboard()" class="shrink-0 p-3 bg-white shadow-sm border border-stone-50 rounded-xl active:scale-90 flex items-center justify-center">
+                        <i id="pix-copy-icon" data-lucide="copy" class="w-4 h-4 text-stone-300"></i>
+                    </button>
+                </div>
             </div>
-            <button onclick="handleFinishProcess()" class="w-full py-6 bg-stone-900 text-white rounded-[2rem] font-bold shadow-lg hover:bg-black active:scale-95 transition-all">Concluir</button>
+
+            <button onclick="handleFinishProcess()" class="w-full py-5 md:py-6 bg-stone-900 text-white rounded-[2rem] font-bold shadow-lg hover:bg-black active:scale-95 transition-all text-xs uppercase tracking-widest">Concluir</button>
         </div>
     </div>
 
@@ -239,19 +259,16 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- LÓGICA DE CAMINHOS INTELIGENTE (Bruno) ---
-        // Se estiver no Canvas, usa 'artifacts'. Se subir para produção, usa caminho direto.
         const isCanvas = typeof __app_id !== 'undefined';
-        const appId = isCanvas ? __app_id : 'casamento_gui_nuria';
+        const appId = isCanvas ? __app_id : 'casamento_guilherme_nuria';
         
-        const giftsPath = isCanvas ? ['artifacts', appId, 'public', 'data', 'gifts'] : ['casamento_gui_nuria', 'lista', 'presentes'];
-        const contribsPath = isCanvas ? ['artifacts', appId, 'public', 'data', 'contributions'] : ['casamento_gui_nuria', 'lista', 'contribuicoes'];
+        const giftsPath = isCanvas ? ['artifacts', appId, 'public', 'data', 'gifts'] : ['casamento_guilherme_nuria', 'lista', 'presentes'];
+        const contribsPath = isCanvas ? ['artifacts', appId, 'public', 'data', 'contributions'] : ['casamento_guilherme_nuria', 'lista', 'contribuicoes'];
 
         const ADMIN_PASSWORD = "Flamengo99";
         let user = null;
         let gifts = [], contributions = [], selectedGift = null, modalQty = 1;
 
-        // PIX logic
         const crc16 = (d) => {
             let c = 0xFFFF;
             for (let i = 0; i < d.length; i++) {
@@ -270,7 +287,6 @@
             return p + crc16(p);
         };
 
-        // UI Helpers
         window.setView = (v) => {
             document.getElementById('client-view').classList.toggle('hidden', v !== 'client');
             document.getElementById('admin-view').classList.toggle('hidden', v !== 'admin');
@@ -299,10 +315,9 @@
             b.innerHTML = msg; 
             b.className = `max-w-4xl mx-auto mt-8 p-6 rounded-[2rem] text-sm text-center font-sans shadow-lg block border-2 ${classes}`;
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => b.classList.add('hidden'), 8000);
+            setTimeout(() => b.classList.add('hidden'), 15000);
         }
 
-        // Data Management
         function initData() {
             onSnapshot(collection(db, ...giftsPath), snap => {
                 gifts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -325,21 +340,21 @@
 
                 return `
                 <div class="bg-white rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl transition-all border border-stone-100 flex flex-col transform ${isSoldOut ? 'opacity-70 grayscale-[0.5]' : 'hover:-translate-y-2'}">
-                    <div class="p-6 md:p-10 text-center flex-grow flex flex-col font-sans">
-                        <div class="w-12 h-12 md:w-20 md:h-20 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-8 text-rose-200">
-                            <i data-lucide="gift" class="w-6 h-6 md:w-10 md:h-10"></i>
+                    <div class="p-4 md:p-10 text-center flex-grow flex flex-col font-sans">
+                        <div class="w-10 h-10 md:w-20 md:h-20 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-8 text-rose-200">
+                            <i data-lucide="gift" class="w-5 h-5 md:w-10 md:h-10"></i>
                         </div>
-                        <h3 class="text-xl md:text-3xl font-serif font-light mb-2 md:mb-4 text-stone-800 leading-tight line-clamp-2 min-h-[3rem] md:min-h-0">${item.nome}</h3>
-                        <p class="text-stone-50 text-[10px] md:text-sm mb-2 md:mb-4 uppercase font-bold tracking-widest">
-                            <span class="bg-stone-500 p-1 px-2 rounded-lg text-white">
-                                ${isFree ? 'Disponível' : 'COTA: R$ ' + parseFloat(item.valor).toFixed(2)}
-                            </span>
+                        <h3 class="text-sm md:text-3xl font-serif font-light mb-2 md:mb-4 text-stone-800 leading-tight line-clamp-2 min-h-[2.5rem] md:min-h-0">${item.nome}</h3>
+                        
+                        <p class="text-stone-900 text-xs md:text-xl mb-1 md:mb-2 uppercase font-bold tracking-widest">
+                            ${isFree ? 'REGISTO LIVRE' : 'COTA: R$ ' + parseFloat(item.valor).toFixed(2)}
                         </p>
-                        <p class="text-xs md:text-base uppercase font-bold mb-4 md:mb-8 ${rem > 0 ? 'text-emerald-600' : 'text-rose-500'}">
-                            ${rem > 0 ? rem + ' disp.' : 'Reservado'}
+                        <p class="text-[10px] md:text-lg uppercase font-bold mb-4 md:mb-8 ${rem > 0 ? 'text-emerald-600' : 'text-rose-500'}">
+                            ${rem > 0 ? rem + ' disponíveis' : 'Reservado'}
                         </p>
+
                         <button onclick="handleOpenGiftModal('${item.id}', ${rem})" ${isSoldOut ? 'disabled' : ''} class="mt-auto w-full py-3 md:py-5 bg-stone-900 text-white rounded-xl md:rounded-2xl text-[9px] md:text-[10px] uppercase font-bold hover:bg-black transition-all shadow-md">
-                            ${isFree ? 'Presentear' : 'Presentear'}
+                            ${isFree ? 'Oferecer' : 'Presentear'}
                         </button>
                     </div>
                 </div>`;
@@ -355,7 +370,7 @@
                     <td class="py-5 font-medium text-stone-800">${c.guestName}</td>
                     <td class="py-5 text-stone-500">${c.giftName} (${c.quantity}x)</td>
                     <td class="py-5 font-bold text-stone-900">
-                        ${c.totalValue > 0 ? 'R$ ' + parseFloat(c.totalValue).toFixed(2) : '<span class="text-emerald-500 uppercase text-[10px]">Oferecido</span>'}
+                        ${c.totalValue > 0 ? 'R$ ' + parseFloat(c.totalValue).toFixed(2) : '<span class="text-emerald-500 uppercase text-[10px]">Reservado</span>'}
                     </td>
                     <td class="py-5 text-right">
                         <button onclick="handleDeleteContrib('${c.id}')" class="p-2 text-stone-200 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
@@ -379,7 +394,6 @@
             lucide.createIcons();
         };
 
-        // Event Handlers
         document.getElementById('gift-form').onsubmit = async (e) => {
             e.preventDefault();
             const editId = document.getElementById('edit-id').value;
@@ -447,10 +461,8 @@
             selectedGift.rem = rem; modalQty = 1;
             document.getElementById('guest-name-input').value = '';
             document.getElementById('modal-gift-name').innerText = selectedGift.nome;
-
             const isFree = !selectedGift.valor || parseFloat(selectedGift.valor) === 0;
             document.getElementById('modal-total-box').classList.toggle('hidden', isFree);
-            
             updateModalUI(); openModal('modal-gift');
         };
 
@@ -465,7 +477,6 @@
             if(!isFree) document.getElementById('modal-total').innerText = `R$ ${(selectedGift.valor * modalQty).toFixed(2)}`;
         }
 
-        // FUNÇÃO PARA FINALIZAR E MOSTRAR OBRIGADO
         window.handleFinishProcess = () => {
             closeModal('modal-pix');
             closeModal('modal-gift');
@@ -481,19 +492,16 @@
         window.handleConfirmContribution = async () => {
             const name = document.getElementById('guest-name-input').value.trim();
             if (!name) return showStatus("Assina o teu presente!", "bg-amber-100 text-amber-700 border-amber-200");
-            
             const isFree = !selectedGift.valor || parseFloat(selectedGift.valor) === 0;
             const total = isFree ? 0 : selectedGift.valor * modalQty;
-
             const btn = document.getElementById('btn-confirm-gift');
             btn.disabled = true;
             try {
                 await addDoc(collection(db, ...contribsPath), {
                     giftId: selectedGift.id, giftName: selectedGift.nome, guestName: name, quantity: modalQty, totalValue: total, timestamp: new Date().toISOString()
                 });
-                
                 if(!isFree && selectedGift.pixKey) {
-                    const p = generatePixPayload(selectedGift.pixKey, 'GUI E NURIA', 'SAO PAULO', total);
+                    const p = generatePixPayload(selectedGift.pixKey, 'GUILHERME E NURIA', 'SAO PAULO', total);
                     document.getElementById('pix-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(p)}`;
                     document.getElementById('pix-payload').innerText = selectedGift.pixKey;
                     document.getElementById('pix-instruction').innerHTML = `<b>${name}</b>, utiliza o código abaixo ou o QR Code para pagar <b>R$ ${total.toFixed(2)}</b> via PIX.`;
@@ -519,7 +527,6 @@
             document.getElementById('btn-confirm-action').onclick = action;
         }
 
-        // Start App
         async function startApp() {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -531,4 +538,5 @@
         startApp();
     </script>
 </body>
+
 </html>
