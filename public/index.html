@@ -370,7 +370,7 @@
                         <p class="text-stone-900 text-xs md:text-xl mb-1 md:mb-2 uppercase font-bold tracking-widest">${isFree ? 'REGISTO LIVRE' : 'COTA: R$ ' + parseFloat(item.valor).toFixed(2)}</p>
                         <p class="text-[10px] md:text-lg uppercase font-bold mb-4 md:mb-8 ${rem > 0 ? 'text-emerald-600' : 'text-rose-500'}">${rem > 0 ? rem + ' disponíveis' : 'Reservado'}</p>
                         <button onclick="handleOpenGiftModal('${item.id}', ${rem})" ${isSoldOut ? 'disabled' : ''} class="mt-auto w-full py-3 md:py-5 bg-stone-900 text-white rounded-xl md:rounded-2xl text-[9px] md:text-[10px] uppercase font-bold hover:bg-black transition-all shadow-md">
-                            ${isFree ? 'Oferecer' : 'Presentear'}
+                            ${isFree ? 'Presentear' : 'Presentear'}
                         </button>
                     </div>
                 </div>`;
